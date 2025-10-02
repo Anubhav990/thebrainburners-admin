@@ -208,12 +208,18 @@ export default function SignupPage() {
 
             {/* Right Section - Signup Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center bg-white overflow-y-auto">
-                <div className="w-full max-w-md px-6 py-8">
+                <div className="w-full max-w-md px-6 py-2 md:py-8">
                     <div className="lg:hidden mb-6 text-center">
-                        <div className="w-16 h-16 bg-orange-500 rounded-full mx-auto flex items-center justify-center mb-3">
-                            <span className="text-white text-2xl font-black">L</span>
+                        <div className="flex justify-center">
+                            <Image
+                                src="/svgs/brainburnerslogo.svg"
+                                alt="The Brain Burners"
+                                width={140}
+                                height={40}
+                                priority
+                                className="relative"
+                            />
                         </div>
-                        <h2 className="text-2xl font-black text-black">Join Us Today</h2>
                     </div>
 
                     <div className="flex items-center gap-2 mb-4">
@@ -223,7 +229,7 @@ export default function SignupPage() {
                         </span>
                     </div>
 
-                    <h2 className="text-3xl sm:text-4xl text-black font-black mb-1">
+                    <h2 className="text-2xl sm:text-4xl text-black font-black mb-1">
                         Create Your Account
                     </h2>
                     <p className="text-gray-600 mb-6 text-sm">

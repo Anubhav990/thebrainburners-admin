@@ -132,10 +132,16 @@ export default function LoginPage() {
             <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-white">
                 <div className="w-full max-w-md">
                     <div className="lg:hidden mb-8 text-center">
-                        <div className="w-16 h-16 bg-orange-500 rounded-full mx-auto flex items-center justify-center mb-4">
-                            <span className="text-white text-2xl font-black">L</span>
+                        <div className="flex justify-center">
+                            <Image
+                                src="/svgs/brainburnerslogo.svg"
+                                alt="The Brain Burners"
+                                width={140}
+                                height={40}
+                                priority
+                                className="relative"
+                            />
                         </div>
-                        <h2 className="text-2xl font-black text-black">Welcome Back</h2>
                     </div>
 
                     <div className="flex items-center gap-2 mb-6">
@@ -145,7 +151,7 @@ export default function LoginPage() {
                         </span>
                     </div>
 
-                    <h2 className="text-3xl sm:text-4xl text-black font-black mb-2">
+                    <h2 className="text-2xl sm:text-4xl text-black font-black mb-2">
                         Login to Your Account
                     </h2>
                     <p className="text-gray-600 mb-8">
