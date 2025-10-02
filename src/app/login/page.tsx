@@ -11,13 +11,13 @@ export default function LoginPage() {
         password: ""
     });
 
-    const [errors, setErrors] = useState({});
-    const [touched, setTouched] = useState({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [submitError, setSubmitError] = useState("");
 
-    const validateField = (name, value) => {
+    const validateField = (name: 'email' | 'password', value: string): string => {
         switch (name) {
             case "email":
                 if (!value.trim()) return "Email is required";
@@ -34,28 +34,31 @@ export default function LoginPage() {
         }
     };
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        const fieldName = name as 'email' | 'password';
+        setFormData(prev => ({ ...prev, [fieldName]: value }));
 
-        if (touched[name]) {
-            setErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
+        if (touched[fieldName]) {
+            setErrors(prev => ({ ...prev, [fieldName]: validateField(fieldName, value) }));
         }
     };
 
-    const handleBlur = (e) => {
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setTouched(prev => ({ ...prev, [name]: true }));
-        setErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
+        const fieldName = name as 'email' | 'password';
+        setTouched(prev => ({ ...prev, [fieldName]: true }));
+        setErrors(prev => ({ ...prev, [fieldName]: validateField(fieldName, value) }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const newErrors = {};
+        const newErrors: { [key: string]: string } = {};
         Object.keys(formData).forEach(key => {
-            const error = validateField(key, formData[key]);
-            if (error) newErrors[key] = error;
+            const fieldName = key as 'email' | 'password';
+            const error = validateField(fieldName, formData[fieldName]);
+            if (error) newErrors[fieldName] = error;
         });
 
         setErrors(newErrors);
@@ -228,14 +231,17 @@ export default function LoginPage() {
                             </a>
                         </div>
 
-                        <button
-                            type="button"
-                            onClick={handleSubmit}
-                            disabled={isSubmitting}
-                            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {isSubmitting ? 'Signing In...' : 'Sign In'}
-                        </button>
+                        <form onSubmit={handleSubmit}>
+                            {/* all your input fields here */}
+
+                            <button
+                                type="submit" // important
+                                disabled={isSubmitting}
+                                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isSubmitting ? 'Signing In...' : 'Sign In'}
+                            </button>
+                        </form>
 
                         <p className="text-center text-gray-600 text-sm mt-6">
                             Don't have an account?{' '}

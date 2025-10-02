@@ -5,18 +5,32 @@ import { supabase } from "@/lib/SupabaseClient";
 import { useRouter } from "next/navigation";
 
 export default function ContactSubmissionsAdmin() {
+  // Define a type for your submissions
+  type Submission = {
+    id: string;
+    full_name: string;
+    email: string;
+    phone: string;
+    timeline: string;
+    budget: string;
+    project_details?: string | null;
+    hear_about?: string | null;
+    created_at: string;
+  };
+
+  // Use the typed state
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-
-  const [submissions, setSubmissions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("created_at");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
+
 
   // Check authentication on mount
   useEffect(() => {
@@ -63,21 +77,21 @@ export default function ContactSubmissionsAdmin() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('contact_submissions')
+        .from<'contact_submissions', Submission>('contact_submissions')
         .select('*')
         .order(sortBy, { ascending: sortOrder === 'asc' });
 
       if (error) throw error;
-      setSubmissions(data);
-    } catch (error) {
+      setSubmissions(data || []); // ensure it's an array
+    } catch (error: any) {
       console.error('Error fetching submissions:', error);
-      setError(error.message);
+      setError(error.message || 'Unknown error');
     } finally {
       setLoading(false);
     }
   };
 
-  const deleteSubmission = async (id) => {
+  const deleteSubmission = async (id: string) => {
     if (!confirm('Are you sure you want to delete this submission?')) return;
 
     try {
@@ -128,15 +142,16 @@ export default function ContactSubmissionsAdmin() {
     sub.phone.includes(searchTerm)
   );
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
+
 
   if (loading) {
     return (
@@ -255,7 +270,7 @@ export default function ContactSubmissionsAdmin() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredSubmissions.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
                       No submissions found
                     </td>
                   </tr>
